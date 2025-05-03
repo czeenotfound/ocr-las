@@ -1,0 +1,259 @@
+/* * Google Font Import - Poppins - Roboto - Josefin Sans */
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+
+:root{
+    /* Colors */
+    --color-white: #ffffff;
+    --color-light: hsl(252, 30%, 95%);
+    --color-gray: hsl(252, 15%, 65%);
+    --color-primary: #ad0000;
+    --color-secondary: #f90000;
+    --color-tertiary: #DDE5B6;
+    --color-success: hsl(120, 95%, 65%);
+    --color-danger: hsl(0, 95%, 60%);
+    --color-dark: hsl(252, 30%, 17%);
+    --color-black: hsl(252, 30%, 10%);
+
+    /* Border  */
+    --border-radius: 2rem;
+    --card-border-radius: 1rem;
+    --btn-padding: 0.6rem 2rem;
+    --search-padding: 0.6rem 1rem;
+    --card-padding: 1rem;
+
+    --sticky-top-left: 5.4rem;
+    --sticky-top-right: -18rem;
+
+    /* Fonts */
+    --font-poppins: 'Poppins', sans-serif;
+}
+
+*, 
+*::before, 
+*::after{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    border: none;
+}
+
+body {
+    background-color: var(--color-light);
+    font-family: var(--font-poppins);
+    font-size: 1rem;
+    opacity: 1;
+    overflow-y: scroll;
+    margin: 0;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font-poppins);
+}
+
+li {
+    list-style: none;
+}
+
+h1{
+    font-weight: 800;
+}
+
+h4 {
+    font-family: var(--font-poppins);
+    font-size: 1.275rem;
+    color: var(--bs-emphasis-color);
+}
+
+/* Navbar */
+
+nav{
+    background-color: var(--color-primary);
+}
+
+.navbar-expand .navbar-nav {
+    margin-left: auto;
+}
+
+.sidebar-logo span{
+    font-size: 0.8rem;
+}
+
+.sidebar-logo a{
+    font-size: 1rem;
+}
+
+/* Main Section */
+
+video {
+    display: none;
+    opacity: 0;
+}
+
+canvas {
+    height: 350px;
+    width: 100%;
+}
+
+#canvas {
+    cursor: pointer;
+}
+
+button {
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 10px 30px;
+    background-color: #0060DF;
+    border: solid 1px #0060DF;
+    color: #FFF;
+    pointer-events: all;
+    transition: .2s ease;
+}
+
+.removed {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.invisible {
+    border: 1px solid #B1B1B3;
+    background: white;
+    color: #000;
+    cursor: default;
+    pointer-events: none;
+}
+
+.camView {
+    cursor: pointer;
+}
+
+.highlighter p {
+    padding: 5px;
+    z-index: 2;
+    font-size: 1.6rem;
+    color: white;
+    text-shadow: 1px 1px 0 black;
+    position: absolute;
+    place-content: center;
+    margin: 0;
+    width: inherit;
+    height: inherit;
+    display: grid;
+}
+
+.highlighter {
+    border: 2px solid var(--color-secondary);
+    box-shadow: 0 0 50px 0 var(--color-secondary);
+    z-index: 1;
+    position: fixed;
+    display: grid;
+    place-content: center;
+    animation: .2s in, 5s .2s fade forwards;
+    pointer-events: none;
+    border-radius: 3px;
+}
+
+@keyframes in {
+  from {
+    border-color: white;
+    box-shadow: 0 0 50px 0 white;
+  }
+}
+
+.highlighter_s {
+    border: 2px solid white;
+    box-shadow: 0 0 50px 0 white;
+    z-index: 1;
+    position: fixed;
+    display: grid;
+    place-content: center;
+    animation: pop .25s cubic-bezier(.18,.89,.32,1.28);
+    pointer-events: none;
+    transform-origin: center;
+    border-radius: 3px;
+}
+
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+    border-color: transparent;
+  }
+}
+
+@keyframes fade {
+  to {
+    opacity: 0;
+  }
+}
+
+.attendanceToday{
+    -webkit-mask-image: linear-gradient(#000, rgba(0,0,0,1));
+    mask-image: linear-gradient(#000, rgba(0,0,0,0.2));
+}
+
+.btn-overlay {
+    background-color: var(--color-gray);
+    position: absolute;
+    height: 320px;
+    top: 0px; /* Adjust top position as needed */
+    z-index: 999; /* Ensure the button appears on top of the table */
+    -webkit-mask-image: linear-gradient(#000, rgba(0,0,0,1));
+    mask-image: linear-gradient(#000, rgba(0,0,0,1));
+}
+
+.btn-overlay:hover {
+    text-decoration: underline;
+    -webkit-mask-image: linear-gradient(#000, rgba(0,0,0,1));
+    mask-image: linear-gradient(#000, rgba(0,0,0,0.2));
+}
+
+#SCANID{
+    font-size: 2rem;
+}
+#SCANID:hover{
+    font-size: 3rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+#visitorBTN{
+    font-size: 2rem;
+}
+
+#visitorBTN:hover{
+    font-size: 3rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+/* Login */
+
+
+
+#signin{
+    height: 60vh;
+}
+
+.login-box {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    background-color: var(--color-white);
+}
+
+.btn-signin{
+    padding: 10px 30px;
+    border-radius: 10px;
+    background-color: var(--color-secondary);
+    border: none;
+}
+
+.btn-signin:hover{
+    background-color:var(--color-primary);
+}
+
