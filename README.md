@@ -45,11 +45,6 @@ SURV Co. Team Members:
 3. Configure your database:
    - Create a new MySQL database named 'ocrlasdb1'
    - Update database credentials in `app/configdb/constants.php` if needed
-   - Default configuration:
-     - Host: localhost
-     - User: root
-     - Password: (empty)
-     - Database: ocrlasdb1
 
 4. Start your XAMPP Apache and MySQL services
 
