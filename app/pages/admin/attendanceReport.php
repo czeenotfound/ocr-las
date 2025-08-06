@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php
     date_default_timezone_set('Asia/Hong_Kong');
     // Get the current timestamp
@@ -211,7 +196,7 @@
                     <?php if (mysqli_num_rows($overall_attendance_result) > 0): ?>
                     <div class="card">
                         <!-- <div class="card-body table-responsive" style="display: none;">  -->
-                        <div class="card-body table-responsive" style="display: none;"> 
+                        <div class="card-body table-responsive" > 
                             <table id="AttendanceReport" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>

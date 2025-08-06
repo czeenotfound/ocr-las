@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php
 function redirect($page){
     header('location: '. ROOT_URL . $page);
@@ -27,7 +12,8 @@ if(isset($_POST['submit'])) {
     $last_name = filter_var($_POST['last_name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $gender = filter_var($_POST['gender'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $mobile = filter_var($_POST['mobile'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $purpose_id = filter_var($_POST['purpose_id'], FILTER_SANITIZE_NUMBER_INT);
+    $purpose_id = $_POST['purpose_id'];
+    $custom_purpose = isset($_POST['other_purpose']) ? trim($_POST['other_purpose']) : '';
     $schoolyear = $_POST['schoolyear'];
     $semester = $_POST['semester'];
  
@@ -40,9 +26,7 @@ if(isset($_POST['submit'])) {
         $_SESSION['add_visitor'] = "Please enter last name";
     } elseif(!$gender) {
         $_SESSION['add_visitor'] = "Select a gender";
-    } elseif(!$mobile) {
-        $_SESSION['add_visitor'] = "Please enter your Mobile Number";
-    } 
+    }
     
 
     if($_SESSION ['add_visitor']) { 
@@ -60,7 +44,7 @@ if(isset($_POST['submit'])) {
         $id_number = uniqid();
 
         // Insert visitor into visitors table
-        $insert_visitor_query = "INSERT INTO visitors (visitor_id, first_name, middle_name, last_name, gender, mobile, created_date) VALUES ('$id_number', '$first_name', '$middle_name', '$last_name', '$gender', '$mobile' , '$date')";
+        $insert_visitor_query = "INSERT INTO visitors (visitor_id, first_name, middle_name, last_name, gender, mobile, created_date) VALUES ('$id_number', '$first_name', '$middle_name', '$last_name', '$gender', '$mobile', '$date')";
         $insert_visitor_result = mysqli_query($connection, $insert_visitor_query);
 
         if($insert_visitor_result) {
@@ -71,6 +55,16 @@ if(isset($_POST['submit'])) {
             if(mysqli_num_rows($get_visitor_result) > 0) {
                 $visitor_row = mysqli_fetch_assoc($get_visitor_result);
                 $visitor_full_name = $visitor_row['first_name'] . ' ' . $visitor_row['middle_name'] . ' ' . $visitor_row['last_name'];
+
+                // If 'Others' is selected, insert the custom purpose and use its ID
+                if ($purpose_id === 'other' && $custom_purpose !== '') {
+                    $stmt = mysqli_prepare($connection, "INSERT INTO purpose (description) VALUES (?)");
+                    mysqli_stmt_bind_param($stmt, "s", $custom_purpose);
+                    mysqli_stmt_execute($stmt);
+                    $purpose_id = mysqli_insert_id($connection);
+                } else {
+                    $purpose_id = filter_var($purpose_id, FILTER_SANITIZE_NUMBER_INT);
+                }
 
                 // Insert visitor's attendance record
                 $insert_attendance_query = "INSERT INTO attendance (id_number, time_in, date, period, purpose_id, schoolyear, semester, status) VALUES ('$id_number', '$time', '$date', '$time_suffix', '$purpose_id', '$schoolyear', '$semester', '0')";

@@ -1,6 +1,6 @@
 <!--
     /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
+    * Copyright (C) 2025 SURV Co. - All Rights Reserved
     * 
     * OCR-Library Attendance System
     *
@@ -24,10 +24,9 @@
         $result = mysqli_query($connection, $query);
         $avatar = mysqli_fetch_assoc($result);
     } else {
+        session_destroy();
         header('location: ' . ROOT_URL . 'adminLogin'); // RESTRICTING USER TO ACCESS TO THE WEBSITE NEED TO LOGIN SESSION FIRST
     }
-
-    
 
     // Check if the user has uploaded an avatar
     if (!empty($avatar['avatar'])) {

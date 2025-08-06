@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php if($action == 'add'):?>
     <?php if(isset($_SESSION['user_is_admin'])) : ?>   
     <main class="content px-3 py-2">
@@ -52,54 +37,66 @@
                     </div>
                 <?php endif ?>
                 <form method="POST">
-                    <div class="mb-3">
-                        <label for="student_id" class="form-label">Student ID</label>
-                        <input type="text" class="form-control" id="student_id" name="student_id">
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="student_id" class="form-label">Student ID</label>
+                            <input type="text" class="form-control" id="student_id" name="student_id">
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name">
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label for="middle_name" class="form-label">Middle Name</label>
+                            <input type="text" class="form-control" id="middle_name" name="middle_name">
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="mb-3"> 
+                            <label for="course_id" class="form-label">Course</label>
+                            <select class="form-select" id="course_id" name="course_id" required>
+                                <?php while($course = mysqli_fetch_assoc($courses)) : ?>
+                                    <option value="<?= $course['id'] ?> = <?= $course['name'] ?>"><?= $course['name'] ?></option>
+                                <?php endwhile ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="yearlevel_id" class="form-label">Year</label>
+                            <select class="form-select" id="yearlevel_id" name="yearlevel_id" required>
+                                <option value="" disabled selected>Select Year</option>
+                                <?php while($yearlevel = mysqli_fetch_assoc($yearlevels)) : ?>
+                                    <option value="<?= $yearlevel['id'] ?>"><?= $yearlevel['year'] ?></option>
+                                <?php endwhile ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="section" class="form-label">Section</label>
+                            <select class="form-select" id="section" name="section" required>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="school_year" class="form-label">School Year Attended:</label>
+                            <input type="text" class="form-control" id="school_year" name="school_year" placeholder="Ex. 20xx-20xx">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="first_name" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="middle_name" class="form-label">Middle Name</label>
-                        <input type="text" class="form-control" id="middle_name" name="middle_name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="last_name" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="gender" class="form-label">Gender</label>
-                        <select class="form-select" id="gender" name="gender" required>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="mb-3"> 
-                        <label for="course_id" class="form-label">Course</label>
-                        <select class="form-select" id="course_id" name="course_id" required>
-                            <?php while($course = mysqli_fetch_assoc($courses)) : ?>
-                                <option value="<?= $course['id'] ?> = <?= $course['name'] ?>"><?= $course['name'] ?></option>
-                            <?php endwhile ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="yearlevel_id" class="form-label">Year</label>
-                        <select class="form-select" id="yearlevel_id" name="yearlevel_id" required>
-                            <option value="" disabled selected>Select Year</option>
-                            <?php while($yearlevel = mysqli_fetch_assoc($yearlevels)) : ?>
-                                <option value="<?= $yearlevel['id'] ?>"><?= $yearlevel['year'] ?></option>
-                            <?php endwhile ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="section" class="form-label">Section</label>
-                        <input type="text" class="form-control" id="section" name="section">
-                    </div>
-                    <div class="mb-3">
-                        <label for="school_year" class="form-label">School Year Attended:</label>
-                        <input type="text" class="form-control" id="school_year" name="school_year" placeholder="Ex. 20xx-20xx">
-                    </div>
+                    
                     <hr>
 
                     <div class="float-end">

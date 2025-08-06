@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php
     function redirect($page){
         header('location: '. ROOT_URL .$page);
@@ -863,12 +848,12 @@
                         }
                     }
                     // Always redirect to the login page after processing the login attempt
-                    $_SESSION['changepass'] = "fail";
-                    redirect('admin/dashboard');
-
+                    $_SESSION['changepass'] = "Failed to update password!";
+                    redirect('admin/profile/?id=' . $id);
+                    
                 } else {
-                    $_SESSION['changepass'] = "FAIL";
-                    redirect('admin/dashboard');
+                    $_SESSION['changepass'] = "Failed to update password!";
+                    redirect('admin/profile/?id=' . $id);
                 }
             }
         }

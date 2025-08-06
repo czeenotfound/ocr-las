@@ -1,18 +1,3 @@
- <!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
     <!-- LOGOUT MODAL -->
     <div class="modal fade " id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog" role="document">

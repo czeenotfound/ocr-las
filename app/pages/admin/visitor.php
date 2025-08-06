@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php if($action == 'delete'):?>
     <?php
          if(isset($_GET['id'])){
@@ -135,7 +120,7 @@
                                         <td>  <?= $visitor['visitor_id']; ?></td>
                                         <td class="text-capitalize"> <?= $visitor['last_name']; ?>, <?= $visitor['first_name']; ?> <?= $visitor['middle_name']; ?></td>
                                         <td class="text-capitalize">  <?= $visitor['gender']; ?></td>
-                                        <td>  <?= $visitor['mobile']; ?></td>
+                                        <td><?= $visitor['mobile']; ?></td>
                                         <?php if(isset($_SESSION['user_is_admin'])) : ?>
                                         <td class="text-capitalize"> <a href="<?= ROOT_URL ?>admin/visitor/delete/?id=<?= $visitor['id'] ?>" class="btn btn-danger" ><i class="fa-regular fa-trash-can"></i></a></td>
                                         <?php endif ?>      

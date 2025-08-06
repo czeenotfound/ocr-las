@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php
     include 'includes/header.php';
 
@@ -86,10 +71,16 @@
                         <form action="<?= ROOT_URL ?>verify" method="POST" class="form-horizontal p-3" id="divvideo">
                             <i class="fa-regular fa-id-card"></i>
                             <label>ID Number</label><p id="time"></p>
-                           
-                            <div class="mb-3">
-                                <input type="text" name="studentID" id="text" placeholder="Scan ID Number" class="form-control">
-                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-9 mb-3">
+                                    <input type="text" name="studentID" id="text" placeholder="Scan ID Number" class="form-control">
+                                </div>
+                                <div class="col-xl-3 mb-3">
+                                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                </div>
+                            </div> 
+                            
                         </form>
                     </div>
                     <hr>
@@ -103,7 +94,7 @@
                             var inputField = document.getElementById('text');
                             
                             // Define time ranges when the input field should be enabled
-                            var morningStartHour = 8;
+                            var morningStartHour = 7;
                             var morningEndHour = 13;
                             var afternoonStartHour = 13; // 1 PM
                             var afternoonEndHour = 23;   // 4 PM
@@ -124,7 +115,7 @@
                             var button = document.getElementById('visitorBTN');
                             
                             // Define time ranges when the button should be enabled
-                            var morningStartHour = 8;
+                            var morningStartHour = 7;
                             var morningEndHour = 13;
                             var afternoonStartHour = 13; // 1 PM
                             var afternoonEndHour = 23;   // 4 PM
@@ -145,7 +136,7 @@
                             var button = document.getElementById('SCANID');
                             
                             // Define time ranges when the button should be enabled
-                            var morningStartHour = 8;
+                            var morningStartHour = 7;
                             var morningEndHour = 13;
                             var afternoonStartHour = 13; // 1 PM
                             var afternoonEndHour = 23;   // 4 PM
@@ -204,7 +195,19 @@
                                     <?php while ($visitor = mysqli_fetch_assoc($visitor_result)) : ?>
                                         <tr>
                                             <td><?= $visitor['id_number']; ?></td>
-                                            <td class="text-capitalize"> <?= $visitor['last_name']; ?>, <?= $visitor['first_name']; ?> <?= $visitor['middle_name']; ?></td>
+                                            <td class="text-capitalize">
+                                                <?php
+                                                    // Mask last name: first 3 letters + asterisks for the rest
+                                                    $last = $visitor['last_name'];
+                                                    $last_masked = ucfirst(substr($last, 0, 3)) . str_repeat('*', max(0, strlen($last) - 3));
+
+                                                    // Mask first name: first letter + asterisks for the rest
+                                                    $first = $visitor['first_name'];
+                                                    $first_masked = ucfirst(substr($first, 0, 1)) . str_repeat('*', max(0, strlen($first) - 1));
+
+                                                    echo "{$last_masked}, {$first_masked}";
+                                                ?>
+                                            </td>
                                             <td><?= ($visitor['period'] == 'AM') ? $visitor['time_in'] : ''; ?></td>
                                             <td><?= ($visitor['period'] == 'AM') ? $visitor['time_out'] : ''; ?></td>
                                             <td><?= ($visitor['period'] == 'PM') ? $visitor['time_in'] : ''; ?></td>

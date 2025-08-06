@@ -1,30 +1,15 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
-
    <div class="modal fade" id="SCANIDModal" tabindex="-1" aria-labelledby="ScanIdLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ScanIdLabel"> Time Out</h5>
+                    <h5 class="modal-title" id="ScanIdLabel"> ID Number Scan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="card">
                     <div class="p-3" id="divvideo">
                         <section id="demos">
-                            <div id="liveView">
+                            <div id="liveView" style="position:relative;">
+                                <div id="ocr-status" style="position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:10;color:#fff;background:rgba(0,0,0,0.7);padding:8px 16px;border-radius:8px;font-weight:bold;"></div>
                                 <canvas id="canvas" class="bg-danger"></canvas>
                                 <video id="webcam" class="bg-primary" playsinline crossorigin="anonymous" width="100%" height="50%"></video>
                             </div>
@@ -37,7 +22,6 @@
                 </div>
                 <form action="<?= ROOT_URL ?>verify" method="POST">
                     <input type="text" name="studentID" id="inputField" value="">
-                    <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
         </div>
@@ -111,20 +95,24 @@
                             <select class="form-select" id="gender" name="gender" required>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
-                                <option value="other">Prefer not to say</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
                             </select>
                         </div>
-                        <div class="mb-4">
-                            <label for="mobile" class="form-label">Mobile Number <small class="text-muted">(ex. 09xxxxxxxxx)</small></label>
+                        
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">Mobile Number</label>
                             <input type="text" class="form-control" id="mobile" name="mobile" value="<?= $mobile ?>">
                         </div>
+
                         <div class="mb-3">
-                            <label for="purpose_id" class="form-label">(Time In) Purpose</label>
-                            <select class="form-select" id="purpose_id" name="purpose_id" required>
+                            <label for="visitor_purpose_id" class="form-label">(Time In) Purpose</label>
+                            <select class="form-select" id="visitor_purpose_id" name="purpose_id" required onchange="toggleOtherPurpose(this, 'other_purpose2')">
                                     <?php while($purpose = mysqli_fetch_assoc($visitors_purposes)) : ?>
                                         <option value="<?= $purpose['id'] ?>"><?= $purpose['description']; ?></option>
                                     <?php endwhile ?>
-                            </select> 
+                                    <option value="other">Others</option>
+                            </select>
+                            <input type="text" class="form-control mt-2" id="other_purpose2" name="other_purpose" placeholder="Please specify your purpose" style="display:none;">
                             <input type="hidden" name="schoolyear" value="<?= currentschoolyear() ?>">
                             <input type="hidden" name="semester" value="<?= currentSemester() ?>">            
                         </div>
@@ -141,6 +129,15 @@
     <!-- end of Time In -->
 
     <!-- Time Out -->
+    <?php
+        // Add this before the modal or at the top of the file, after DB connection and date setup
+        $date = date('Y-m-d');
+        $time_suffix = date('A');
+        $visitors_to_timeout_query = "SELECT v.id, v.last_name, v.first_name, v.middle_name FROM visitors v
+            INNER JOIN attendance a ON v.visitor_id = a.id_number
+            WHERE a.date = '$date' AND a.period = '$time_suffix' AND a.status = '0'";
+        $visitors_to_timeout = mysqli_query($connection, $visitors_to_timeout_query);
+    ?>
     <div class="modal fade" id="visitorTimeOutModal" tabindex="-1" aria-labelledby="visitorTimeOutLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -153,7 +150,7 @@
                     <div class="mb-3">
                             <label for="visitor_name_out" class="form-label">Name</label>
                             <select class="form-select" id="visitor_name_out" name="visitor_name_out" required>
-                            <?php while($visitor = mysqli_fetch_assoc($visitors)) : ?>
+                            <?php while($visitor = mysqli_fetch_assoc($visitors_to_timeout)) : ?>
                                 <option value="<?= $visitor['id'] ?>"><?= $visitor['last_name']; ?>, <?= $visitor['first_name']; ?> <?= $visitor['middle_name']; ?></option>
                             <?php endwhile ?>
                             </select>
@@ -255,11 +252,13 @@
                                 <input type="hidden" name="schoolyear" value="<?= currentschoolyear() ?>">
                                 <input type="hidden" name="semester" value="<?= currentSemester() ?>">
                                 <label for="purpose_id" class="form-label text-center fw-bold">(Time In) Purpose</label>
-                                <select class="form-select" id="purpose_id" name="purpose_id" required>
+                                <select class="form-select" id="purpose_id" name="purpose_id" required onchange="toggleOtherPurpose(this, 'other_purpose1')">
                                     <?php while($purpose = mysqli_fetch_assoc($student_faculty_purposes)) : ?>
                                         <option value="<?= $purpose['id'] ?>"><?= $purpose['description']; ?></option>
                                     <?php endwhile ?>
+                                    <option value="other">Others</option>
                                 </select>
+                                <input type="text" class="form-control mt-2" id="other_purpose1" name="other_purpose" placeholder="Please specify your purpose" style="display:none;">
 
                                 <div class="mt-5 float-end">
                                     <a href="<?= ROOT_URL ?>home" type="button" class="btn btn-secondary">Cancel</a>
@@ -328,6 +327,7 @@
                                         <?php while ($attendance = mysqli_fetch_assoc($attendance_result1)) : ?>
                                             <tr>
                                                 <td><?= $attendance['id_number']; ?></td>
+                                                <!-- <td><?= $attendance['last_name']; ?>, <?= $attendance['first_name']; ?> <?= $attendance['middle_name']; ?></td> -->
                                                 <td>******************</td>
                                                 <td><?= ($attendance['period'] == 'AM') ? $attendance['time_in'] : ''; ?></td>
                                                 <td><?= ($attendance['period'] == 'AM') ? $attendance['time_out'] : ''; ?></td>
@@ -341,7 +341,19 @@
                                             <!-- Display visitors -->
                                             <tr>
                                                 <td><?= $visitor['id_number']; ?></td>
-                                                <td class="text-capitalize"> <?= $visitor['last_name']; ?>, <?= $visitor['first_name']; ?> <?= $visitor['middle_name']; ?></td>
+                                                <td class="text-capitalize">
+                                                    <?php
+                                                        // Mask last name: first 3 letters + asterisks for the rest
+                                                        $last = $visitor['last_name'];
+                                                        $last_masked = ucfirst(substr($last, 0, 3)) . str_repeat('*', max(0, strlen($last) - 3));
+
+                                                        // Mask first name: first letter + asterisks for the rest
+                                                        $first = $visitor['first_name'];
+                                                        $first_masked = ucfirst(substr($first, 0, 1)) . str_repeat('*', max(0, strlen($first) - 1));
+
+                                                        echo "{$last_masked}, {$first_masked}";
+                                                    ?>
+                                                </td>
                                                 <td><?= ($visitor['period'] == 'AM') ? $visitor['time_in'] : ''; ?></td>
                                                 <td><?= ($visitor['period'] == 'AM') ? $visitor['time_out'] : ''; ?></td>
                                                 <td><?= ($visitor['period'] == 'PM') ? $visitor['time_in'] : ''; ?></td>
@@ -378,6 +390,18 @@
     <script src="<?= ROOT_URL ?>/assets/JS/scan.js"></script>
     <script src="<?= ROOT_URL ?>/assets/JS/clock.js"></script>
 
+    <script>
+function toggleOtherPurpose(select, inputId) {
+    var otherInput = document.getElementById(inputId);
+    if (select.value === 'other') {
+        otherInput.style.display = 'block';
+        otherInput.required = true;
+    } else {
+        otherInput.style.display = 'none';
+        otherInput.required = false;
+    }
+}
+</script>
     
 </body>
 </html>

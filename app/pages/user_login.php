@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php
     function redirect($page){
         header('location: '. ROOT_URL .$page);
@@ -30,7 +15,6 @@
         } elseif (!$password){
             $_SESSION['LoginPage'] = 'Password Required';
         } else {
-            // Prepare and execute the SQL query using prepared statements
             $fetch_user_query = "SELECT * FROM users WHERE username=?";
             $stmt = mysqli_prepare($connection, $fetch_user_query);
             mysqli_stmt_bind_param($stmt, 's', $username);
@@ -42,7 +26,7 @@
                 $db_password = $user['password'];
 
                 if (password_verify($password, $db_password)){
-                    // Set session variables
+                    
                     $_SESSION['user-id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['first_name'] = $user['first_name'];
@@ -52,15 +36,20 @@
                     if(isset($_SESSION['status'])) {
                         if($_SESSION['status'] == 2) {
                             $_SESSION['user_is_admin'] = true;
+                            unset($_SESSION['user_is_staff']);
+                            unset($_SESSION['user_is_disabled']);
                         } elseif($_SESSION['status'] == 0) {
                             $_SESSION['LoginPage'] = 'Your account has been disabled. Please contact the administrator for assistance.';
                             $_SESSION['user_is_disabled'] = true;
+                            unset($_SESSION['user_is_admin']);
+                            unset($_SESSION['user_is_staff']);
                         } elseif($_SESSION['status'] == 1) {
                             $_SESSION['user_is_staff'] = true;
+                            unset($_SESSION['user_is_admin']);
+                            unset($_SESSION['user_is_disabled']);
                         }
                     }
 
-                    // Redirect based on user status
                     if(isset($_SESSION['user_is_admin']) || isset($_SESSION['user_is_staff'])) {
                         redirect('admin/dashboard');
                     } elseif(isset($_SESSION['user_is_disabled'])) {
@@ -73,10 +62,8 @@
                 $_SESSION['LoginPage'] = "User not found";
             }
         }
-        // Always redirect to the login page after processing the login attempt
         redirect('adminLogin');
     } else {
-        // Redirect to the login page if the submit button is not pressed
         redirect('adminLogin');
     }
 ?>

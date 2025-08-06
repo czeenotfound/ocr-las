@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php
     date_default_timezone_set('Asia/Hong_Kong');
     // Get the current timestamp
@@ -126,7 +111,12 @@
                                         </tr>
                                     <?php endwhile ?>
                                     <?php while ($visitor = mysqli_fetch_assoc($visitor_result)) : ?>
-                                        
+                                        <?php
+                                            $purpose_id = $visitor['purpose_id'];
+                                            $purpose_query = "SELECT description FROM purpose WHERE id=$purpose_id";
+                                            $purpose_result = mysqli_query($connection, $purpose_query);
+                                            $purpose = mysqli_fetch_assoc($purpose_result);
+                                        ?>
                                         <!-- Display visitors -->
                                         <tr>
                                             <td><?= $visitor['id_number']; ?></td>

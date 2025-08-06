@@ -1,18 +1,3 @@
-<!--
-    /* 
-    * Copyright (C) 2024 SURV Co. - All Rights Reserved
-    * 
-    * OCR-Library Attendance System
-    *
-    * IT 132 - Software Engineering
-    * (SURV Co.) Members:
-    * Sanguila, Mary Joy
-    * Undo, Khalil M.
-    * Rodrigo, Jondino  
-    * Vergara, Kayce
-    *
-    */
- -->
 <?php
     date_default_timezone_set('Asia/Hong_Kong');
         // Get the current timestamp
@@ -143,31 +128,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6">    
-                            <div class="card border-0 shadow mb-4 profilehead">
-                                <div class="card-body ">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <p class="mb-0">Attendance by Department</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6">    
-                            <div class="card border-0 shadow mb-4 profilehead">
-                                <div class="card-body ">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <p class="mb-0">Attendance by Course</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <!-- Table Element -->
                     <div class="card border-0">
                         <div class="card-header">
@@ -220,15 +181,21 @@
                                         </tr>
                                     <?php endwhile ?>
                                     <?php while ($visitor = mysqli_fetch_assoc($visitor_result)) : ?>
+                                        <?php
+                                            $purpose_id = $visitor['purpose_id'];
+                                            $purpose_query = "SELECT description FROM purpose WHERE id=$purpose_id";
+                                            $purpose_result = mysqli_query($connection, $purpose_query);
+                                            $purpose = mysqli_fetch_assoc($purpose_result);
+                                        ?>
                                         <!-- Display visitors -->
                                         <tr>
-                                            <td><?= $visitor['id_number']; ?></td>
+                                            <td>visitor<?= $visitor['id_number']; ?></td>
                                             <td><?= $visitor['last_name'].', '.$visitor['first_name'].' '.$visitor['middle_name'];?></td>
                                             <td><?= ($visitor['period'] == 'AM') ? $visitor['time_in'] : ''; ?></td>
                                             <td><?= ($visitor['period'] == 'AM') ? $visitor['time_out'] : ''; ?></td>
                                             <td><?= ($visitor['period'] == 'PM') ? $visitor['time_in'] : ''; ?></td>
                                             <td><?= ($visitor['period'] == 'PM') ? $visitor['time_out'] : ''; ?></td>
-                                            <td class="text-capitalize"><?= $purpose['description']; ?></td>
+                                            <td><?= $purpose['description']; ?></td>
                                             <td> </td>
                                             <td> </td>
                                             <td><?= $visitor['date']; ?></td>
